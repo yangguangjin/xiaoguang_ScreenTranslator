@@ -108,9 +108,9 @@
 
   10块钱可以总共翻译2.3W次图片,还不是月付的,用到才扣
 
-![image-20260208163527753](C:\Users\yangg\AppData\Roaming\Typora\typora-user-images\image-20260208163527753.png)
+![image-20260208163527753](docs/images/image-20260208163527753.png)
 
-![image-20260208163533390](C:\Users\yangg\AppData\Roaming\Typora\typora-user-images\image-20260208163533390.png)
+![image-20260208163533390](docs/images/image-20260208163533390.png)
 
 
 
