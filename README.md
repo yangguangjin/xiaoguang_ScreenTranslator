@@ -106,11 +106,11 @@
 
 
 
+  10块钱可以总共翻译2.3W次图片,还不是月付的,用到才扣
 
+![image-20260208163527753](C:\Users\yangg\AppData\Roaming\Typora\typora-user-images\image-20260208163527753.png)
 
-
-
-
+![image-20260208163533390](C:\Users\yangg\AppData\Roaming\Typora\typora-user-images\image-20260208163533390.png)
 
 
 
@@ -121,7 +121,6 @@
 | 功能 | 说明 |
 |------|------|
 | AI 截图翻译 | 框选屏幕区域，AI 视觉模型直接翻译截图（默认模式） |
-| AI 文字识别 + 翻译 | AI 提取截图文字后，用 Google/Bing/AI 翻译 |
 | 多平台 AI | OpenAI / Claude / Gemini / 自定义 OpenAI 兼容端点 |
 | 全局快捷键 | 键盘组合键或鼠标侧键触发 |
 | 多显示器 | 框选任意屏幕，结果显示在指定显示器 |
