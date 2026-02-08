@@ -1,0 +1,43 @@
+# .NET
+bin/
+obj/
+publish/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.DotSettings.user
+
+# Build output
+output/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+
+# NuGet
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+*.nupkg
+**/packages/*
+!**/packages/build/
+
+# OS
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+# App settings (may contain API keys)
+**/settings.json
+
+# Misc
+*.log
+*.tmp
+*.bak
+*.swp

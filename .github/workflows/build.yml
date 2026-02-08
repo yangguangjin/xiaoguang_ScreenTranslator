@@ -1,0 +1,63 @@
+name: Build & Release
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET 8
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build -c Release --no-restore
+
+    - name: Publish
+      run: dotnet publish ScreenTranslator -c Release -r win-x64 --self-contained
+
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ScreenTranslator-win-x64
+        path: ScreenTranslator/bin/Release/net8.0-windows/win-x64/publish/
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: windows-latest
+    permissions:
+      contents: write
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET 8
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Publish
+      run: dotnet publish ScreenTranslator -c Release -r win-x64 --self-contained
+
+    - name: Create zip package
+      run: Compress-Archive -Path 'ScreenTranslator\bin\Release\net8.0-windows\win-x64\publish\*' -DestinationPath 'ScreenTranslator-${{ github.ref_name }}.zip'
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: |
+          ScreenTranslator-${{ github.ref_name }}.zip
+        generate_release_notes: true
