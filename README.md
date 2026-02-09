@@ -3,11 +3,11 @@
 [![Build](https://github.com/yangguangjin/xiaoguang_ScreenTranslator/actions/workflows/build.yml/badge.svg)](https://github.com/yangguangjin/xiaoguang_ScreenTranslator/actions/workflows/build.yml)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
-![image-20260209120646831](C:\Users\yangg\AppData\Roaming\Typora\typora-user-images\image-20260209120646831.png)
+![image-20260209120646831](docs/images/image-20260209120646831.png)
 
-![image-20260209115256000](C:\Users\yangg\AppData\Roaming\Typora\typora-user-images\image-20260209115256000.png)
+![image-20260209115256000](docs/images/image-20260209115256000.png)
 
-![image-20260209115153416](C:\Users\yangg\AppData\Roaming\Typora\typora-user-images\image-20260209115153416.png)
+![image-20260209115153416](docs/images/image-20260209115153416.png)
 
 **超轻量级** Windows 屏幕翻译工具。快捷键框选屏幕区域，AI 大模型智能翻译，多显示器双栏显示。
 
