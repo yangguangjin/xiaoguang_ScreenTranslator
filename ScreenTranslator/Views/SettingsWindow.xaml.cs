@@ -17,7 +17,6 @@ public partial class SettingsWindow : Window
         DataContext = viewModel;
 
         PlatformCombo.ItemsSource = Enum.GetValues<AiPlatform>();
-        TargetLangCombo.ItemsSource = Enum.GetValues<TargetLanguage>();
         WindowModeCombo.ItemsSource = new[]
         {
             new EnumDisplayItem<WindowMode>(WindowMode.Independent, "独立窗口"),

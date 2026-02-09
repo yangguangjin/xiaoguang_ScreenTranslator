@@ -60,7 +60,8 @@ public partial class App : Application
         // Init main window
         _mainViewModel = new MainViewModel
         {
-            FontSize = _settings.UI.FontSize
+            FontSize = _settings.UI.FontSize,
+            ShowOriginalText = _settings.UI.ShowOriginalText
         };
         _mainWindow = new MainWindow(_mainViewModel);
         _mainWindow.SettingsRequested += OnSettingsRequested;
@@ -183,7 +184,7 @@ public partial class App : Application
 
             _mainViewModel.SetStatus("正在 AI 截图翻译...");
             var result = await _aiService.TranslateImageAsync(
-                bitmap, _settings.TargetLanguage.ToLanguageCode(), _settings.AI);
+                bitmap, _settings.TargetLanguage, _settings.AI);
             _mainViewModel.UpdateResult(result);
         }
         catch (Exception ex)
@@ -325,6 +326,7 @@ public partial class App : Application
             _settings.UI.WindowHeight = _mainWindow.Height;
         }
         _settings.UI.IsLogPanelCollapsed = _mainWindow.IsLogPanelCollapsed;
+        _settings.UI.ShowOriginalText = _mainViewModel.ShowOriginalText;
         _settingsService.Save(_settings);
 
         _trayIcon?.Dispose();

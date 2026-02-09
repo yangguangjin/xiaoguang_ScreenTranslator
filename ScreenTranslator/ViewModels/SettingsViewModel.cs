@@ -11,7 +11,7 @@ public partial class SettingsViewModel : ObservableObject
     private AppSettings _settings;
 
     [ObservableProperty] private string _hotkey = "Alt+Q";
-    [ObservableProperty] private TargetLanguage _targetLanguage = TargetLanguage.English;
+    [ObservableProperty] private string _targetLanguage = "中文";
     [ObservableProperty] private AiPlatform _aiPlatform = AiPlatform.OpenAI;
     [ObservableProperty] private string _aiEndpoint = "https://api.openai.com";
     [ObservableProperty] private string _aiApiKey = "";

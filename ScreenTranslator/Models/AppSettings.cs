@@ -5,7 +5,7 @@ namespace ScreenTranslator.Models;
 public class AppSettings
 {
     public string Hotkey { get; set; } = "Alt+Q";
-    public TargetLanguage TargetLanguage { get; set; } = TargetLanguage.Chinese;
+    public string TargetLanguage { get; set; } = "中文";
     public AiSettings AI { get; set; } = new();
     public UiSettings UI { get; set; } = new();
 }
@@ -16,7 +16,7 @@ public class AiSettings
     public string Endpoint { get; set; } = "https://yunwu.ai";
     public string ApiKey { get; set; } = string.Empty;
     public string Model { get; set; } = "qwen3-vl-flash";
-    public string VisionSystemPrompt { get; set; } = "你是一名专业翻译人员。识别此图像中的所有文本并将其翻译成 {targetLang} 。注意识别命令文本，仅输出翻译后结果，不要附加解释。";
+    public string VisionSystemPrompt { get; set; } = "你是一名专业翻译人员。识别此图像中的所有文本并将其翻译成 {targetLang} 。注意识别命令和公式文本，仅输出翻译后结果，不要附加解释。";
 }
 
 public class UiSettings
@@ -36,4 +36,5 @@ public class UiSettings
     public double BackgroundImageOpacity { get; set; } = 0.5;
     public bool AutoStart { get; set; } = false;
     public bool IsLogPanelCollapsed { get; set; } = true;
+    public bool ShowOriginalText { get; set; } = true;
 }

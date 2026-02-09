@@ -80,11 +80,10 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="目标语言" Foreground="{DynamicResource TextBrush}"
                            VerticalAlignment="Center"/>
-                <ComboBox x:Name="TargetLangCombo" Grid.Column="1"
-                          SelectedItem="{Binding TargetLanguage}"
-                          Padding="6,4"/>
+                <TextBox Grid.Column="1" Text="{Binding TargetLanguage}"
+                         Padding="6,4" FontSize="13"/>
                 <Button Grid.Column="2" Style="{StaticResource HelpButton}"
-                        ToolTip="选择翻译的目标语言，截图中的文字将被翻译为此语言"/>
+                        ToolTip="输入翻译的目标语言，如：中文、English、日本語、한국어 等，只要模型支持即可"/>
             </Grid>
             <!-- AI 设置 -->
             <TextBlock Text="AI 设置" Foreground="{DynamicResource PrimaryBrush}"
