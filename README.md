@@ -9,9 +9,9 @@
 
 ![image-20260209115153416](docs/images/image-20260209115153416.png)
 
-**超轻量级** Windows 屏幕翻译工具。快捷键框选屏幕区域，AI 大模型智能翻译，多显示器双栏显示。
+**超轻量级** 屏幕翻译工具，支持 Windows + macOS。快捷键框选屏幕区域，AI 大模型智能翻译，多显示器双栏显示。
 
-> 无广告 | 开源免费 | 超轻量 | AI 驱动 | 多显示器 | 高度自定义
+> 无广告 | 开源免费 | 超轻量 | AI 驱动 | 多显示器 | 高度自定义 | 跨平台
 
 ## 为什么选择小光翻译？
 
@@ -116,6 +116,7 @@
 |------|------|
 | AI 截图翻译 | 框选屏幕区域，AI 视觉模型直接翻译截图（默认模式） |
 | 多平台 AI | OpenAI / Claude / Gemini / 自定义 OpenAI 兼容端点 |
+| 跨平台 | Windows + macOS（Avalonia UI），一套代码双平台 |
 | 全局快捷键 | 键盘组合键或鼠标侧键触发 |
 | 多显示器 | 框选任意屏幕，结果显示在指定显示器 |
 | 双栏显示 | 原文/译文左右对照，可拖拽调整比例 |
@@ -123,13 +124,19 @@
 | 主题 | 深色/浅色 + 自定义强调色 + 背景图片 |
 | 窗口控制 | 置顶、鼠标穿透、透明度调节 |
 | 系统托盘 | 关闭窗口最小化到托盘，双击恢复 |
-| 开机自启 | 注册表自启动 |
+| 开机自启 | Windows 注册表 / macOS LaunchAgents |
 
 ## 安装
 
 ### 方式一：下载压缩包
 
-从 [Releases](https://github.com/yangguangjin/xiaoguang_ScreenTranslator/releases) 页面下载最新的 `ScreenTranslator-x.x.x.zip`，解压后直接运行 `ScreenTranslator.exe`。
+从 [Releases](https://github.com/yangguangjin/xiaoguang_ScreenTranslator/releases) 页面下载对应平台的压缩包：
+
+- Windows: `ScreenTranslator-win-x64-x.x.x.zip`
+- macOS Intel: `ScreenTranslator-osx-x64-x.x.x.zip`
+- macOS Apple Silicon: `ScreenTranslator-osx-arm64-x.x.x.zip`
+
+解压后直接运行。
 
 ### 方式二：从源码构建
 
@@ -138,25 +145,43 @@ git clone https://github.com/yangguangjin/xiaoguang_ScreenTranslator.git
 cd xiaoguang_ScreenTranslator
 dotnet restore
 dotnet build
+
+# 运行跨平台版本 (Avalonia)
+dotnet run --project ScreenTranslator.Desktop
+
+# 运行原 WPF 版本 (仅 Windows)
 dotnet run --project ScreenTranslator
 ```
 
-发布独立 exe + zip 压缩包：
+发布独立包：
 
 ```bash
-build.bat
+# Windows
+dotnet publish ScreenTranslator.Desktop -c Release -r win-x64 --self-contained
+
+# macOS Intel
+dotnet publish ScreenTranslator.Desktop -c Release -r osx-x64 --self-contained
+
+# macOS Apple Silicon
+dotnet publish ScreenTranslator.Desktop -c Release -r osx-arm64 --self-contained
 ```
 
 ## 系统要求
 
 | 项目 | 要求 |
 |------|------|
-| 操作系统 | Windows 10/11 64 位 |
+| 操作系统 | Windows 10/11 64 位 或 macOS 12+ (Intel / Apple Silicon) |
 | 运行时 | 无需安装（自包含发布） |
 | 内存 | 建议 1GB 以上 |
 | 网络 | 使用翻译功能时需联网 |
 
-> 无需安装 .NET 运行时，无需 Visual C++ Redistributable，无需 AVX2 指令集，无需下载 OCR 模型。解压即用。
+> 无需安装 .NET 运行时，无需下载 OCR 模型。解压即用。
+
+### macOS 权限说明
+
+macOS 首次运行需要授权：
+- **屏幕录制** — 截屏功能需要此权限（系统偏好设置 → 隐私与安全性 → 屏幕录制）
+- **辅助功能** — 全局快捷键需要此权限（系统偏好设置 → 隐私与安全性 → 辅助功能）
 
 ## 快速开始
 
@@ -236,7 +261,11 @@ build.bat
 ## 配置文件
 
 ```
-%USER%\%APPDATA%\ScreenTranslator\settings.json
+# Windows
+%APPDATA%\ScreenTranslator\settings.json
+
+# macOS
+~/Library/Application Support/ScreenTranslator/settings.json
 ```
 
 JSON 格式，可直接编辑。删除后重启程序恢复默认设置。

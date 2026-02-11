@@ -1,8 +1,7 @@
-using System.Windows.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ScreenTranslator.Models;
+using ScreenTranslator.Core.Models;
 
-namespace ScreenTranslator.ViewModels;
+namespace ScreenTranslator.Core.ViewModels;
 
 public partial class MainViewModel : ObservableObject
 {
@@ -10,7 +9,7 @@ public partial class MainViewModel : ObservableObject
     private string _originalText = string.Empty;
 
     [ObservableProperty]
-    private BitmapSource? _capturedImage;
+    private byte[]? _capturedImageData;
 
     [ObservableProperty]
     private string _translatedText = string.Empty;

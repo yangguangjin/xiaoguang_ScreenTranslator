@@ -1,0 +1,217 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:ScreenTranslator.Core.ViewModels"
+        xmlns:conv="using:ScreenTranslator.Desktop.Converters"
+        x:Class="ScreenTranslator.Desktop.Views.MainWindow"
+        Title="小光翻译"
+        Width="800" Height="600"
+        MinWidth="400" MinHeight="300"
+        SystemDecorations="None"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="Transparent"
+        ExtendClientAreaToDecorationsHint="True"
+        CanResize="True">
+
+    <Window.Resources>
+        <conv:BytesToBitmapConverter x:Key="BytesToBitmapConverter"/>
+    </Window.Resources>
+
+    <Border Background="{DynamicResource BackgroundBrush}"
+            BorderBrush="{DynamicResource AppBorderBrush}"
+            BorderThickness="1" CornerRadius="8">
+        <Grid RowDefinitions="Auto,*,Auto">
+
+            <!-- Title Bar -->
+            <Border Grid.Row="0" Background="{DynamicResource SurfaceBrush}"
+                    CornerRadius="8,8,0,0" Height="40"
+                    IsVisible="{Binding !IsClickThrough}"
+                    PointerPressed="TitleBar_PointerPressed">
+                <Grid ColumnDefinitions="Auto,Auto,Auto,*,Auto,Auto,Auto,Auto">
+
+                    <!-- Menu Button -->
+                    <Button x:Name="MenuButton" Grid.Column="0"
+                            Content="☰" Classes="toolbar"
+                            Margin="8,4,4,4" FontSize="16"
+                            Click="MenuButton_Click" ToolTip.Tip="菜单"/>
+
+                    <!-- App Name -->
+                    <TextBlock Grid.Column="1"
+                               Text="AI截图"
+                               Foreground="{DynamicResource PrimaryBrush}"
+                               VerticalAlignment="Center"
+                               FontSize="12" FontWeight="Bold"
+                               Margin="4,0"/>
+
+                    <!-- Error indicator -->
+                    <TextBlock Grid.Column="2" Text="!" FontWeight="Bold"
+                               Foreground="{DynamicResource AccentRedBrush}"
+                               FontSize="12" Padding="4,0"
+                               VerticalAlignment="Center"
+                               IsVisible="{Binding HasError}"/>
+
+                    <!-- Status Text -->
+                    <TextBlock Grid.Column="3"
+                               Text="{Binding StatusText}"
+                               Foreground="{DynamicResource TextSecondaryBrush}"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center"
+                               TextTrimming="CharacterEllipsis"
+                               FontSize="11"/>
+
+                    <!-- Language Pair -->
+                    <TextBlock Grid.Column="4"
+                               Text="{Binding CurrentLanguagePair}"
+                               Foreground="{DynamicResource TextSecondaryBrush}"
+                               FontSize="11" Margin="4,0"
+                               VerticalAlignment="Center"/>
+
+                    <!-- Elapsed Time -->
+                    <StackPanel Grid.Column="5" Orientation="Horizontal"
+                                VerticalAlignment="Center" Margin="4,0">
+                        <TextBlock Text="{Binding ElapsedMs}"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"
+                                   FontSize="11"/>
+                        <TextBlock Text="ms"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"
+                                   FontSize="11"/>
+                    </StackPanel>
+
+                    <!-- Minimize -->
+                    <Button Grid.Column="6" Content="─" Classes="toolbar"
+                            Margin="0,4,4,4"
+                            Click="MinimizeBtn_Click"/>
+
+                    <!-- Close -->
+                    <Button Grid.Column="7" Content="✕" Classes="toolbar"
+                            Margin="0,4,4,4"
+                            Click="CloseBtn_Click"/>
+                </Grid>
+            </Border>
+            <!-- Toolbar Popup -->
+            <Popup PlacementTarget="{Binding #MenuButton}"
+                   Placement="Bottom"
+                   IsLightDismissEnabled="True"
+                   IsOpen="{Binding IsToolbarPopupOpen, Mode=TwoWay}">
+                <Border Background="{DynamicResource SurfaceBrush}"
+                        BorderBrush="{DynamicResource AppBorderBrush}"
+                        BorderThickness="1" CornerRadius="6"
+                        Padding="8"
+                        BoxShadow="0 4 12 0 #66000000">
+                    <WrapPanel Margin="0,4,0,0">
+                        <ToggleButton Content="📌 置顶" Classes="toolbar"
+                                      Margin="0,2,4,2" FontSize="12" Padding="8,4"
+                                      IsChecked="{Binding IsTopmost}"/>
+                        <ToggleButton Content="👆 穿透" Classes="toolbar"
+                                      Margin="0,2,4,2" FontSize="12" Padding="8,4"
+                                      IsChecked="{Binding IsClickThrough}"
+                                      Click="ClickThrough_Click"/>
+                        <ToggleButton Content="原文" Classes="toolbar"
+                                      Margin="0,2,4,2" FontSize="12" Padding="8,4"
+                                      IsChecked="{Binding ShowOriginalText}"/>
+                        <Button Content="⚙ 设置" Classes="toolbar"
+                                Margin="0,2,4,2" FontSize="12" Padding="8,4"
+                                Click="SettingsBtn_Click"/>
+                    </WrapPanel>
+                </Border>
+            </Popup>
+
+            <!-- Content: Dual Pane -->
+            <Grid Grid.Row="1" Margin="8" ColumnDefinitions="*,5,*">
+
+                <!-- Original Text -->
+                <Border x:Name="OriginalTextBorder" Grid.Column="0"
+                        Background="{DynamicResource SurfaceBrush}"
+                        CornerRadius="4" Padding="8"
+                        IsVisible="{Binding ShowOriginalText}">
+                    <Grid RowDefinitions="Auto,*">
+                        <TextBlock Text="原文" Foreground="{DynamicResource TextSecondaryBrush}"
+                                   FontSize="11" Margin="0,0,0,4"/>
+                        <ScrollViewer Grid.Row="1"
+                                      VerticalScrollBarVisibility="Auto"
+                                      HorizontalScrollBarVisibility="Auto">
+                            <Image Source="{Binding CapturedImageData, Converter={StaticResource BytesToBitmapConverter}}"
+                                   Stretch="Uniform"
+                                   StretchDirection="DownOnly"/>
+                        </ScrollViewer>
+                    </Grid>
+                </Border>
+
+                <GridSplitter Grid.Column="1" Width="5"
+                              Background="Transparent"
+                              IsVisible="{Binding ShowOriginalText}"/>
+
+                <!-- Translated Text -->
+                <Border Grid.Column="2" CornerRadius="4" Padding="8"
+                        Background="{DynamicResource SurfaceBrush}">
+                    <Grid RowDefinitions="Auto,*">
+                        <TextBlock Text="译文" Foreground="{DynamicResource TextSecondaryBrush}"
+                                   FontSize="11" Margin="0,0,0,4"/>
+                        <TextBox Grid.Row="1"
+                                 Text="{Binding TranslatedText, Mode=OneWay}"
+                                 FontSize="{Binding FontSize}"
+                                 Foreground="{DynamicResource TextBrush}"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 IsReadOnly="True"
+                                 TextWrapping="Wrap"
+                                 AcceptsReturn="True"/>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- Log Panel -->
+            <Border Grid.Row="2" Background="#1A1A2E"
+                    BorderBrush="{DynamicResource AppBorderBrush}"
+                    BorderThickness="0,1,0,0" Padding="8,4">
+                <Grid RowDefinitions="Auto,Auto">
+                    <Grid>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="▾" FontSize="10" Padding="4,0"
+                                    Classes="toolbar"
+                                    Click="ToggleLogPanel_Click"
+                                    x:Name="LogToggleButton"
+                                    ToolTip.Tip="展开/收起日志"/>
+                            <TextBlock Text="日志" Foreground="{DynamicResource TextSecondaryBrush}"
+                                       FontSize="11" FontWeight="Bold" VerticalAlignment="Center"
+                                       Margin="4,0,0,0"/>
+                        </StackPanel>
+                        <Button Content="清除" HorizontalAlignment="Right"
+                                Classes="toolbar"
+                                Padding="6,2" FontSize="10"
+                                Click="ClearApiLog_Click"/>
+                    </Grid>
+                    <ScrollViewer x:Name="LogContentPanel" Grid.Row="1"
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Auto"
+                                  MaxHeight="130"
+                                  Margin="0,2,0,0">
+                        <StackPanel>
+                            <TextBox Text="{Binding ErrorDetail, Mode=OneWay}"
+                                     Foreground="#FF6B6B" Background="Transparent"
+                                     BorderThickness="0" IsReadOnly="True"
+                                     TextWrapping="Wrap" FontSize="11" FontFamily="Consolas"
+                                     Margin="0,0,0,2"
+                                     IsVisible="{Binding HasError}"/>
+                            <TextBox Text="{Binding ApiLog, Mode=OneWay}"
+                                     Foreground="{DynamicResource TextSecondaryBrush}"
+                                     Background="Transparent"
+                                     BorderThickness="0" IsReadOnly="True"
+                                     TextWrapping="NoWrap" FontSize="11" FontFamily="Consolas"/>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+
+            <!-- Loading overlay -->
+            <Border Grid.Row="1" Background="#80000000" CornerRadius="4"
+                    IsVisible="{Binding IsTranslating}">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <ProgressBar IsIndeterminate="True" Width="200" Height="4"
+                                 Foreground="{DynamicResource PrimaryBrush}"/>
+                    <TextBlock Text="翻译中..." Foreground="{DynamicResource TextBrush}"
+                               HorizontalAlignment="Center" Margin="0,8,0,0"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

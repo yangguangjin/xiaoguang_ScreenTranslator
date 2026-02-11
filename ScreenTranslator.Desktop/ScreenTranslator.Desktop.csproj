@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.2.3" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.2.3" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.3" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.2.3" Condition="'$(Configuration)' == 'Debug'" />
+    <PackageReference Include="SharpHook" Version="6.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.10" />
+  </ItemGroup>
+
+  <!-- Windows-specific references -->
+  <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('win'))">
+    <FrameworkReference Include="Microsoft.WindowsDesktop.App.WindowsForms" />
+  </ItemGroup>
+
+  <!-- Exclude platform-specific source files based on target RID -->
+  <ItemGroup Condition="!$(RuntimeIdentifier.StartsWith('win'))">
+    <Compile Remove="Platform\Windows\**" />
+  </ItemGroup>
+  <PropertyGroup Condition="$(RuntimeIdentifier.StartsWith('win'))">
+    <DefineConstants>$(DefineConstants);WINDOWS</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup Condition="!$(RuntimeIdentifier.StartsWith('osx'))">
+    <Compile Remove="Platform\macOS\**" />
+  </ItemGroup>
+  <PropertyGroup Condition="$(RuntimeIdentifier.StartsWith('osx'))">
+    <DefineConstants>$(DefineConstants);MACOS</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ScreenTranslator.Core\ScreenTranslator.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Resources\**" />
+    <AvaloniaResource Include="icon.ico" />
+  </ItemGroup>
+
+</Project>

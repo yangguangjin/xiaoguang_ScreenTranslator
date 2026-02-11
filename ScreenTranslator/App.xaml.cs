@@ -1,6 +1,9 @@
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Hardcodet.Wpf.TaskbarNotification;
 using Microsoft.Win32;
@@ -16,6 +19,9 @@ namespace ScreenTranslator;
 public partial class App : Application
 {
     private static Mutex? _mutex;
+
+    [DllImport("gdi32.dll")]
+    private static extern bool DeleteObject(IntPtr hObject);
 
     private SettingsService _settingsService = null!;
     private HotkeyService _hotkeyService = null!;
@@ -182,6 +188,8 @@ public partial class App : Application
         {
             using var bitmap = _captureService.CaptureRegion(region);
 
+            _mainViewModel.CapturedImage = ConvertBitmapToBitmapSource(bitmap);
+
             _mainViewModel.SetStatus("正在 AI 截图翻译...");
             var result = await _aiService.TranslateImageAsync(
                 bitmap, _settings.TargetLanguage, _settings.AI);
@@ -313,6 +321,23 @@ public partial class App : Application
             }
         }
         catch { /* ignore registry errors */ }
+    }
+
+    private static BitmapSource ConvertBitmapToBitmapSource(Bitmap bitmap)
+    {
+        var hBitmap = bitmap.GetHbitmap();
+        try
+        {
+            var source = Imaging.CreateBitmapSourceFromHBitmap(
+                hBitmap, IntPtr.Zero, Int32Rect.Empty,
+                BitmapSizeOptions.FromEmptyOptions());
+            source.Freeze();
+            return source;
+        }
+        finally
+        {
+            DeleteObject(hBitmap);
+        }
     }
 
     private void ExitApp()

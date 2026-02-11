@@ -168,16 +168,14 @@
                             </Grid.RowDefinitions>
                             <TextBlock Text="原文" Foreground="{DynamicResource TextSecondaryBrush}"
                                        FontSize="11" Margin="0,0,0,4"/>
-                            <TextBox Grid.Row="1"
-                                     Text="{Binding OriginalText, Mode=OneWay}"
-                                     FontSize="{Binding FontSize}"
-                                     Foreground="{DynamicResource TextBrush}"
-                                     Background="Transparent"
-                                     BorderThickness="0"
-                                     IsReadOnly="True"
-                                     TextWrapping="Wrap"
-                                     VerticalScrollBarVisibility="Auto"
-                                     AcceptsReturn="True"/>
+                            <ScrollViewer Grid.Row="1"
+                                        VerticalScrollBarVisibility="Auto"
+                                        HorizontalScrollBarVisibility="Auto">
+                                <Image Source="{Binding CapturedImage}"
+                                       Stretch="Uniform"
+                                       StretchDirection="DownOnly"
+                                       RenderOptions.BitmapScalingMode="HighQuality"/>
+                            </ScrollViewer>
                         </Grid>
                     </Border>
 
