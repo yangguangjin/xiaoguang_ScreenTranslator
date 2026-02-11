@@ -1,0 +1,124 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="ScreenTranslator.Desktop.Views.SettingsWindow"
+        Title="设置 - 小光翻译"
+        Width="520" Height="780"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False"
+        Background="{DynamicResource BackgroundBrush}">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="20">
+        <StackPanel>
+            <!-- 快捷键 -->
+            <TextBlock Text="快捷键" Foreground="{DynamicResource PrimaryBrush}"
+                       FontSize="14" FontWeight="Bold" Margin="0,0,0,8"/>
+            <Grid Margin="0,0,0,16" ColumnDefinitions="80,*">
+                <TextBlock Text="翻译热键" Foreground="{DynamicResource TextBrush}"
+                           VerticalAlignment="Center"/>
+                <TextBox Grid.Column="1" Text="{Binding Hotkey}"
+                         IsReadOnly="True" Padding="6,4" FontSize="13"
+                         x:Name="HotkeyBox"
+                         KeyDown="HotkeyBox_KeyDown"/>
+            </Grid>
+
+            <!-- 翻译 -->
+            <TextBlock Text="翻译" Foreground="{DynamicResource PrimaryBrush}"
+                       FontSize="14" FontWeight="Bold" Margin="0,0,0,8"/>
+            <Grid Margin="0,0,0,8" ColumnDefinitions="80,*">
+                <TextBlock Text="目标语言" Foreground="{DynamicResource TextBrush}"
+                           VerticalAlignment="Center"/>
+                <TextBox Grid.Column="1" Text="{Binding TargetLanguage}"
+                         Padding="6,4" FontSize="13"/>
+            </Grid>
+
+            <!-- AI 设置 -->
+            <TextBlock Text="AI 设置" Foreground="{DynamicResource PrimaryBrush}"
+                       FontSize="14" FontWeight="Bold" Margin="0,0,0,8"/>
+            <Grid Margin="0,0,0,8" ColumnDefinitions="80,*">
+                <TextBlock Text="平台" Foreground="{DynamicResource TextBrush}"
+                           VerticalAlignment="Center"/>
+                <ComboBox x:Name="PlatformCombo" Grid.Column="1"
+                          SelectedItem="{Binding AiPlatform}"
+                          Padding="6,4"/>
+            </Grid>
+            <Grid Margin="0,0,0,8" ColumnDefinitions="80,*">
+                <TextBlock Text="接口地址" Foreground="{DynamicResource TextBrush}"
+                           VerticalAlignment="Center"/>
+                <TextBox Grid.Column="1" Text="{Binding AiEndpoint}"
+                         Padding="6,4" FontSize="13"/>
+            </Grid>
+            <Grid Margin="0,0,0,8" ColumnDefinitions="80,*">
+                <TextBlock Text="密钥" Foreground="{DynamicResource TextBrush}"
+                           VerticalAlignment="Center"/>
+                <TextBox Grid.Column="1" Text="{Binding AiApiKey}"
+                         PasswordChar="●"
+                         Padding="6,4" FontSize="13"/>
+            </Grid>
+            <Grid Margin="0,0,0,8" ColumnDefinitions="80,*">
+                <TextBlock Text="模型" Foreground="{DynamicResource TextBrush}"
+                           VerticalAlignment="Center"/>
+                <TextBox Grid.Column="1" Text="{Binding AiModel}"
+                         Padding="6,4" FontSize="13"/>
+            </Grid>
+            <Grid Margin="0,0,0,16" ColumnDefinitions="80,*">
+                <TextBlock Text="提示词" Foreground="{DynamicResource TextBrush}"
+                           VerticalAlignment="Top" Margin="0,4,0,0"/>
+                <TextBox Grid.Column="1" Text="{Binding AiVisionSystemPrompt}"
+                         Padding="6,4" FontSize="13"
+                         TextWrapping="Wrap" AcceptsReturn="True"
+                         Height="80"/>
+            </Grid>
+
+            <!-- 界面 -->
+            <TextBlock Text="界面" Foreground="{DynamicResource PrimaryBrush}"
+                       FontSize="14" FontWeight="Bold" Margin="0,0,0,8"/>
+            <Grid Margin="0,0,0,8" ColumnDefinitions="80,*">
+                <TextBlock Text="字体大小" Foreground="{DynamicResource TextBrush}"
+                           VerticalAlignment="Center"/>
+                <TextBox Grid.Column="1" Text="{Binding FontSize}"
+                         Padding="6,4" FontSize="13"/>
+            </Grid>
+            <Grid Margin="0,0,0,8" ColumnDefinitions="80,*,Auto">
+                <TextBlock Text="不透明度" Foreground="{DynamicResource TextBrush}"
+                           VerticalAlignment="Center"/>
+                <Slider Grid.Column="1" Minimum="0" Maximum="1.0"
+                        Value="{Binding Opacity}"
+                        SmallChange="0.01" LargeChange="0.1"
+                        VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="2" VerticalAlignment="Center" Margin="8,0,0,0"
+                           Foreground="{DynamicResource TextBrush}" FontSize="13"
+                           Text="{Binding Opacity, StringFormat={}{0:P0}}"/>
+            </Grid>
+            <Grid Margin="0,0,0,16" ColumnDefinitions="80,*">
+                <TextBlock Text="显示器" Foreground="{DynamicResource TextBrush}"
+                           VerticalAlignment="Center"/>
+                <ComboBox Grid.Column="1"
+                          ItemsSource="{Binding MonitorList}"
+                          SelectedIndex="{Binding PreferredMonitor}"
+                          Padding="6,4"/>
+            </Grid>
+            <Grid Margin="0,0,0,8" ColumnDefinitions="80,*">
+                <TextBlock Text="主题" Foreground="{DynamicResource TextBrush}"
+                           VerticalAlignment="Center"/>
+                <ComboBox x:Name="ThemeCombo" Grid.Column="1"
+                          SelectedItem="{Binding Theme}"
+                          Padding="6,4"/>
+            </Grid>
+            <Grid Margin="0,0,0,8" ColumnDefinitions="80,*">
+                <TextBlock Text="强调色" Foreground="{DynamicResource TextBrush}"
+                           VerticalAlignment="Center"/>
+                <TextBox Grid.Column="1" Text="{Binding AccentColor}"
+                         Padding="6,4" FontSize="13" MaxLength="7"/>
+            </Grid>
+            <CheckBox Content="开机自启动" Margin="0,0,0,16"
+                      IsChecked="{Binding AutoStart}"
+                      Foreground="{DynamicResource TextBrush}"/>
+
+            <!-- 保存按钮 -->
+            <Button Content="保存" Classes="toolbar"
+                    HorizontalAlignment="Right"
+                    Padding="24,8"
+                    Click="SaveBtn_Click"/>
+        </StackPanel>
+    </ScrollViewer>
+</Window>
