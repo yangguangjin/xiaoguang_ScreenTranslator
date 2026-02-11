@@ -84,26 +84,21 @@ public partial class App : Application
 
     private void InitializeServices()
     {
-        if (OperatingSystem.IsWindows())
-        {
-            _platformService = new Platform.Windows.WindowsPlatformService();
-            _monitorService = new Platform.Windows.WindowsMonitorService();
-            _captureService = new Platform.Windows.WindowsScreenCaptureService();
-            _hotkeyService = new Platform.Windows.WindowsHotkeyService();
-            _mouseHookService = new Platform.Windows.WindowsMouseHookService();
-        }
-        else if (OperatingSystem.IsMacOS())
-        {
-            _platformService = new Platform.macOS.MacPlatformService();
-            _monitorService = new Platform.macOS.MacMonitorService();
-            _captureService = new Platform.macOS.MacScreenCaptureService();
-            _hotkeyService = new Platform.macOS.MacHotkeyService();
-            _mouseHookService = new Platform.macOS.MacMouseHookService();
-        }
-        else
-        {
-            throw new PlatformNotSupportedException("Only Windows and macOS are supported.");
-        }
+#if WINDOWS
+        _platformService = new Platform.Windows.WindowsPlatformService();
+        _monitorService = new Platform.Windows.WindowsMonitorService();
+        _captureService = new Platform.Windows.WindowsScreenCaptureService();
+        _hotkeyService = new Platform.Windows.WindowsHotkeyService();
+        _mouseHookService = new Platform.Windows.WindowsMouseHookService();
+#elif MACOS
+        _platformService = new Platform.macOS.MacPlatformService();
+        _monitorService = new Platform.macOS.MacMonitorService();
+        _captureService = new Platform.macOS.MacScreenCaptureService();
+        _hotkeyService = new Platform.macOS.MacHotkeyService();
+        _mouseHookService = new Platform.macOS.MacMouseHookService();
+#else
+        throw new PlatformNotSupportedException("Only Windows and macOS are supported.");
+#endif
 
         _hotkeyService.SetMouseHookService(_mouseHookService);
         _settingsService = new SettingsService(_platformService);
